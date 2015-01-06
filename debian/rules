@@ -1,0 +1,50 @@
+#!/usr/bin/make -f
+
+composer.phar:
+	wget https://getcomposer.org/download/1.0.0-alpha9/composer.phar
+
+deps: composer.phar
+	php composer.phar install
+
+wp-cli.phar: deps
+	php -dphar.readonly=0 utils/make-phar.php wp-cli.phar
+
+build: wp-cli.phar
+
+clean:
+	dh_testdir
+	dh_testroot
+	dh_clean
+	rm -rf vendor
+	rm -f wp-cli.phar
+	rm -f composer.phar
+	rm -f composer.lock
+	rm -rf debian/php-wpcli
+
+_debian:
+	mkdir -p debian/php-wpcli/DEBIAN/
+	cp debian/control debian/php-wpcli/DEBIAN/
+	cp debian/copyright debian/php-wpcli/DEBIAN/
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_prep
+	dh_installdirs
+
+	install -o root -g root -m 755 wp-cli.phar $(CURDIR)/debian/php-wpcli/usr/bin/wp
+
+binary: install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs
+	dh_installdocs
+	dh_installexamples
+	dh_installman
+	dh_link
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb

@@ -1,0 +1,7 @@
+Format-Specification: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?op=file&rev=135
+Name: php-wpcli
+Maintainer: Daniel Bachhuber <daniel@handbuilt.co>
+Source: https://github.com/wp-cli/wp-cli
+
+Copyright:  2011-2013 WP-CLI Development Group (https://github.com/wp-cli/wp-cli/contributors)
+License: MIT
